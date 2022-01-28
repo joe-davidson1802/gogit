@@ -1,23 +1,18 @@
-# gdiv
+# gogit
 
-Quickly find divergences between branches.
+Scrape a git org for go package versions
 
-## Use case:
-
-You are looking after a large number of git repos, you are using some kind of branching strategy e.g. main->staging->production.
-
-If you want to find the repos where staging is behind run:
 
 ```
-gdiv my-org main staging
+gogit -pat-path ~/.gogitpat myorg main github.com/gorilla/mux
 ```
 
 This will produce a list of repos:
 
 ```
-my-api                                         ahead by 0, behind by 0
-my-front-end                                   ahead by 22, behind by 0
-other-api                                      ahead by 1, behind by 0
+my-api                                         v1.8.0
+my-front-end                                   none
+other-api                                      v.1.7.0
 ```
 
 ## Installation 
@@ -25,10 +20,10 @@ other-api                                      ahead by 1, behind by 0
 Install the package:
 
 ```
-go install github.com/joe-davidson1802/gdiv/cmd/gdiv@latest
+go install github.com/joe-davidson1802/gogit/cmd/gogit@latest
 ```
 
 (Optional) Configure your GitHub Personal Access Token.
 
 - Generate a new PAT <https://github.com/settings/tokens>
-- Save the new pat in `~/.gdivpat`
+- Save the new pat in `~/.gogit
