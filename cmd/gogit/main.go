@@ -8,11 +8,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/google/go-github/v41/github"
 	"github.com/joe-davidson1802/gogit/cfg"
 	"golang.org/x/mod/modfile"
+	"golang.org/x/mod/semver"
 	"golang.org/x/oauth2"
 )
 
@@ -27,32 +29,33 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	ch := make(chan string, len(repos))
 	ds := make(chan Diff, len(repos))
 	wd := writeDiff
 	for _, r := range repos {
 		go func(r string) {
 			diff, _ := client.getDiff(context.Background(), cfg.Org, r, cfg.Branch, cfg.Dep)
-			ch <- wd(r, diff, cfg)
 			ds <- diff
 		}(r)
 	}
-	if cfg.Json {
-		var diffs []Diff
-		for range repos {
-			d := <-ds
-			if d.Version == "" {
-				continue
-			}
-			diffs = append(diffs, d)
+	var diffs []Diff
+	for range repos {
+		d := <-ds
+		if !semver.IsValid(d.Version) {
+			continue
 		}
+		diffs = append(diffs, d)
+	}
+	sort.Slice(diffs, func(i, j int) bool {
+		return semver.Compare(diffs[i].Version, diffs[j].Version) < 1
+	})
+	if cfg.Json {
 		b := new(bytes.Buffer)
 		json.NewEncoder(b).Encode(diffs)
 		fmt.Print(b.String())
 		return
 	}
-	for range repos {
-		fmt.Print(<-ch)
+	for _, d := range diffs {
+		fmt.Print(wd(d.Name, d, cfg))
 	}
 }
 
