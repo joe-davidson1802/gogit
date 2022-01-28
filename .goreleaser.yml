@@ -1,0 +1,51 @@
+# See documentation at http://goreleaser.com
+builds:
+  - main: ./cmd/gogit
+    id: gogit
+    binary: gogit
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - 6
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: arm
+        goarm: 6
+#brews:
+  #-
+    #ids:
+      #- brew
+    #goarm: 7
+    #tap:
+      #owner: joe-davidson1802
+      #name: homebrew-gogit
+      #token: "{{ .Env.BREW_TOKEN }}"
+    #description: A cli to eXeCute project tasks from a readme file
+    #homepage: https://github.com/Joe-Davidson1802/gogit
+    #license: "MIT"
+signs:
+  - artifacts: checksum
+    args: ["--batch", "-u", "{{ .Env.GPG_FINGERPRINT }}", "--output", "${signature}", "--detach-sign", "${artifact}"]
+archives:
+  - format: binary
+    id: gogit
+  - format: tar.gz
+    id: brew
+checksum:
+  name_template: 'checksums.txt'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
