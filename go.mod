@@ -1,4 +1,4 @@
-module github.com/joe-davidson1802/gogit
+module github.com/joerdav/gogit
 
 go 1.16
 

@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/v41/github"
-	"github.com/joe-davidson1802/gogit/cfg"
+	"github.com/joerdav/gogit/cfg"
 	"golang.org/x/mod/modfile"
 	"golang.org/x/mod/semver"
 	"golang.org/x/oauth2"

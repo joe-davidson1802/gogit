@@ -20,7 +20,7 @@ other-api                                      v.1.7.0
 Install the package:
 
 ```
-go install github.com/joe-davidson1802/gogit/cmd/gogit@latest
+go install github.com/joerdav/gogit/cmd/gogit@latest
 ```
 
 (Optional) Configure your GitHub Personal Access Token.
